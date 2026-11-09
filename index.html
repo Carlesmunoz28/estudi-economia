@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funcionament de l'Empresa · Unitats 2, 3 i 4</title>
+<style>
+  :root{
+    --u2:#7c3aed; --u2l:#f3edff;
+    --u3:#0d9488; --u3l:#e6f7f5;
+    --u4:#ea580c; --u4l:#fff1e8;
+    --ex:#2563eb; --exl:#eaf1ff;
+    --ok:#16a34a; --okl:#e8f8ee;
+    --ko:#dc2626; --kol:#fdecec;
+    --txt:#1f2937; --mut:#6b7280; --line:#e5e7eb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#fff;color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+  header{padding:28px 20px 10px;text-align:center}
+  header h1{margin:0;font-size:1.8rem}
+  header p{margin:6px 0 0;color:var(--mut)}
+  nav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px}
+  nav button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;font-size:.95rem}
+  nav button[data-t="u2"].on{background:var(--u2);border-color:var(--u2);color:#fff}
+  nav button[data-t="u3"].on{background:var(--u3);border-color:var(--u3);color:#fff}
+  nav button[data-t="u4"].on{background:var(--u4);border-color:var(--u4);color:#fff}
+  nav button[data-t="ex"].on{background:var(--ex);border-color:var(--ex);color:#fff}
+  main{max-width:900px;margin:0 auto;padding:20px}
+  .tab{display:block;scroll-margin-top:70px;margin-bottom:40px}
+  .unit-head{border-radius:16px;padding:22px;margin-bottom:22px;color:#fff}
+  .unit-head h2{margin:0 0 6px}
+  .unit-head p{margin:0;opacity:.95}
+  #u2 .unit-head{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+  #u3 .unit-head{background:linear-gradient(135deg,#0d9488,#14b8a6)}
+  #u4 .unit-head{background:linear-gradient(135deg,#ea580c,#f59e0b)}
+  #ex .unit-head{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+  .topic{border:1px solid var(--line);border-radius:14px;margin-bottom:18px;overflow:hidden}
+  .topic h3{margin:0;padding:14px 18px;font-size:1.15rem}
+  #u2 .topic h3{background:var(--u2l);color:var(--u2)}
+  #u3 .topic h3{background:var(--u3l);color:var(--u3)}
+  #u4 .topic h3{background:var(--u4l);color:var(--u4)}
+  .exp,.exa{padding:14px 18px}
+  .lbl{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 10px;border-radius:999px;margin-bottom:6px}
+  .exp .lbl{background:#f3f4f6;color:#374151}
+  .exa{background:#fffbea;border-top:1px dashed #facc15}
+  .exa .lbl{background:#fde68a;color:#854d0e}
+  .exp ul{margin:6px 0;padding-left:20px}
+  .key{font-weight:700}
+  #u2 .key{color:var(--u2)} #u3 .key{color:var(--u3)} #u4 .key{color:var(--u4)}
+  table{border-collapse:collapse;width:100%;margin:8px 0;font-size:.93rem}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:#f9fafb}
+  .formula{background:#f1f5f9;border-left:4px solid #64748b;padding:8px 12px;font-family:ui-monospace,Consolas,monospace;margin:8px 0;border-radius:6px}
+  .dafo{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+  .dafo div{padding:10px;border-radius:8px;font-size:.92rem}
+  .d{background:#fdecec}.f{background:#e8f8ee}.a{background:#fff1e8}.o{background:#eaf1ff}
+  .test{border-radius:14px;padding:18px;margin-top:26px;border:2px solid}
+  #u2 .test{border-color:var(--u2)} #u3 .test{border-color:var(--u3)} #u4 .test{border-color:var(--u4)} #ex .test{border-color:var(--ex)}
+  .test h3{margin-top:0}
+  .mini{margin:0;border-radius:0;border:none;border-top:2px solid;padding:14px 18px;background:#fcfcfd}
+  #u2 .mini{border-color:var(--u2)} #u3 .mini{border-color:var(--u3)} #u4 .mini{border-color:var(--u4)}
+  .mini h4{margin:0 0 4px}
+  .q{margin:16px 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .q:last-of-type{border-bottom:none}
+  .q p{margin:0 0 8px;font-weight:600}
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;margin:5px 0;cursor:pointer;font-size:.95rem;color:var(--txt)}
+  .opt:hover:not([disabled]){border-color:#9ca3af;background:#fafafa}
+  .opt.right{background:var(--okl);border-color:var(--ok)}
+  .opt.wrong{background:var(--kol);border-color:var(--ko)}
+  .fb{font-size:.9rem;margin-top:6px;display:none;padding:8px 12px;border-radius:8px}
+  .fb.show{display:block}
+  .fb.good{background:var(--okl);color:#14532d}
+  .fb.bad{background:var(--kol);color:#7f1d1d}
+  .score{font-weight:700;font-size:1.05rem;margin-top:10px}
+  .btn{border:none;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer;font-size:.92rem}
+  .btn.reset{background:#f3f4f6}
+  .btn.show-ans{background:var(--exl);color:var(--ex)}
+  textarea{width:100%;min-height:90px;border:1.5px solid var(--line);border-radius:10px;padding:10px;font:inherit;resize:vertical}
+  .model{display:none;background:var(--okl);border-left:4px solid var(--ok);padding:10px 14px;border-radius:8px;margin-top:8px;font-size:.93rem}
+  .model.show{display:block}
+  .selfgrade{display:none;margin-top:8px;gap:6px;flex-wrap:wrap}
+  .selfgrade.show{display:flex}
+  .selfgrade button{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer}
+  .selfgrade button.sel{background:var(--ex);color:#fff;border-color:var(--ex)}
+  .section-t{margin:30px 0 4px;color:var(--ex)}
+  .progress{height:8px;background:#f3f4f6;border-radius:999px;overflow:hidden;margin-top:6px}
+  .progress div{height:100%;width:0;background:var(--ex);transition:width .3s}
+  footer{text-align:center;color:var(--mut);font-size:.85rem;padding:30px}
+  @media(max-width:600px){.dafo{grid-template-columns:1fr}header h1{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>📘 Funcionament de l'Empresa · 2n Batxillerat</h1>
+  <p>Explicació → Exemple → Test a cada apartat. Al final, examen de prova.</p>
+</header>
+<nav>
+  <button data-t="u2" class="on">Unitat 2 · Emprenedoria</button>
+  <button data-t="u3">Unitat 3 · Organització</button>
+  <button data-t="u4">Unitat 4 · Comercial i màrqueting</button>
+  <button data-t="ex">📝 Examen final</button>
+</nav>
+<main>
+
+<!-- ===================== UNITAT 2 ===================== -->
+<section id="u2" class="tab on">
+  <div class="unit-head">
+    <h2>Unitat 2 · L'emprenedoria</h2>
+    <p>Qui emprèn, quins obstacles troba, què fa l'empresari, com s'analitza l'entorn i què és la RSC.</p>
+  </div>
+
+  <div class="topic">
+    <h3>1. La persona emprenedora</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>L'emprenedor és qui <span class="key">detecta una oportunitat</span> a partir d'una idea innovadora i <span class="key">assumeix riscos econòmics i financers</span> per posar el negoci en marxa i obtenir beneficis. Sense risc no hi ha emprenedoria: per això sol necessitar inversió o finançament.</p>
+      <p><b>Característiques clau:</b> passió i motivació, creativitat i innovació, responsabilitat, lideratge, confiança, perseverança davant els obstacles, capacitat de comunicació i de treballar en equip.</p>
+      <p><b>Perfils:</b> innovador, visionari, d'estil de vida, d'alt creixement, accidental, social i de franquícia.</p>
+      <p><b>Dificultats:</b> incertesa financera (cal invertir o buscar finançament), poca estabilitat del mercat, sobrecàrrega de feina, poca experiència en gestió i poques xarxes de suport professional.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una jove que veu que al seu barri no hi ha cap lloc per reparar mòbils i hi obre un taller amb els seus estalvis i un préstec: ha detectat una oportunitat i assumeix el risc de perdre els diners. Si comprés una franquícia de reparació ja muntada, seria un perfil <i>de franquícia</i>; si ho fes per tenir horari flexible i viure tranquil·la, <i>d'estil de vida</i>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>2. Els knowmads</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>La paraula combina <span class="key">know</span> (conèixer) i <span class="key">nomad</span> (nòmada). Són professionals que es mouen i treballen amb fluïdesa en <b>entorns digitals</b>, molt <b>adaptables al canvi</b> i <b>independents</b>. Són creatius, digitals, autodidactes i resilients. Representen el nou mercat laboral: la feina ja no depèn d'un lloc fix, sinó del coneixement.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Un dissenyador web que treballa per a clients de tres països des d'un portàtil, aprèn eines noves per YouTube i canvia de projecte cada pocs mesos.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>3. Dona i emprenedoria</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Les dones emprenedores s'enfronten a obstacles específics:</p>
+      <ul>
+        <li><span class="key">Sostre de vidre:</span> barreres invisibles que impedeixen arribar a càrrecs directius.</li>
+        <li>Falta de <b>referents femenins</b> visibles en sectors tradicionalment masculins.</li>
+        <li><b>Estereotips de gènere</b> i discriminació directa.</li>
+        <li>Problemes de <b>conciliació</b> familiar i professional i <b>menor accés a finançament</b> d'inversors.</li>
+      </ul>
+      <p><b>Directiva (UE) 2023/970</b> (igualtat retributiva):</p>
+      <ul>
+        <li>Empreses de <b>més de 250 treballadors</b>: auditoria salarial si la bretxa supera el <b>5%</b> sense justificació objectiva.</li>
+        <li>Les ofertes de feina han d'indicar el <b>salari inicial o el rang</b>.</li>
+        <li>Està <b>prohibit preguntar l'historial salarial</b> als candidats.</li>
+      </ul>
+      <p>L'<b>emprenedoria inclusiva</b> busca la mateixa igualtat d'oportunitats per a col·lectius amb barreres.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una empresa de 400 treballadors on les dones cobren un 8% menys pel mateix lloc sense cap motiu objectiu està obligada a fer una auditoria salarial. Una oferta de feina que només posi "sou a convenir" incompliria la directiva.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>4. Funcions de l'empresari</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>L'empresari no només té la idea: ha de fer funcionar el negoci. Les seves quatre funcions segueixen un ordre lògic:</p>
+      <table>
+        <tr><th>Funció</th><th>Què vol dir</th></tr>
+        <tr><td><b>Planificar</b></td><td>Dissenyar un pla d'acció després d'analitzar la situació.</td></tr>
+        <tr><td><b>Organitzar</b></td><td>Coordinar els elements de l'empresa perquè funcionin eficaçment.</td></tr>
+        <tr><td><b>Gestionar</b></td><td>Dirigir-ho tot cap a l'objectiu marcat.</td></tr>
+        <tr><td><b>Controlar</b></td><td>Vigilar que es compleixen els objectius i corregir desviacions.</td></tr>
+      </table>
+      <p>El <span class="key">CEO</span> (<i>Chief Executive Officer</i>) és qui exerceix les funcions executives marcades per la presidència.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una pizzeria: <b>planifica</b> vendre 200 pizzes/setmana; <b>organitza</b> torns de cuina i repartiment; <b>gestiona</b> l'equip i decideix promocions; <b>controla</b> el divendres que n'ha venut 150 i corregeix (més publicitat).</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>5. Entorn específic (microentorn): les 5 forces de Porter</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>El <span class="key">microentorn</span> són els factors que afecten <b>directament</b> l'empresa i del seu sector: clients, competidors, proveïdors, entitats financeres, mercat laboral i intermediaris. S'analitza amb les <b>5 forces de Porter</b>:</p>
+      <ul>
+        <li><b>Poder de negociació dels clients</b></li>
+        <li><b>Poder de negociació dels proveïdors</b></li>
+        <li><b>Amenaça de nous competidors</b></li>
+        <li><b>Amenaça de productes substitutius</b></li>
+        <li><b>Rivalitat entre els competidors existents</b> (la força central, que resumeix les altres)</li>
+      </ul>
+      <p>Com més fortes són les forces, menys atractiu i rendible és el sector.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una línia de taxis a Barcelona: substitutius (Uber, metro, bicing), nous competidors (VTC), clients amb poder perquè comparen preus amb apps, i molta rivalitat entre taxistes. Sector poc atractiu per entrar-hi.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>6. Entorn general (macroentorn): anàlisi PESTEL</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>El <span class="key">macroentorn</span> són factors externs que afecten totes les empreses i que l'empresa <b>no pot controlar</b>. S'analitza amb la <b>PESTEL</b>:</p>
+      <table>
+        <tr><th>Lletra</th><th>Factor</th><th>Exemples</th></tr>
+        <tr><td>P</td><td>Polítics</td><td>Governs, estabilitat, polítiques fiscals</td></tr>
+        <tr><td>E</td><td>Econòmics</td><td>Inflació, tipus d'interès, atur</td></tr>
+        <tr><td>S</td><td>Socioculturals</td><td>Estil de vida, modes, demografia</td></tr>
+        <tr><td>T</td><td>Tecnològics</td><td>Innovacions digitals, IA</td></tr>
+        <tr><td>E</td><td>Ecològics</td><td>Medi ambient, sostenibilitat</td></tr>
+        <tr><td>L</td><td>Legals</td><td>Normatives, lleis laborals</td></tr>
+      </table>
+      <p><b>Diferència clau:</b> Porter = sector concret (micro, incidència directa). PESTEL = context general (macro, no controlable).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una cadena de gimnasos: la pujada dels tipus d'interès encareix els préstecs (E), la moda de la vida saludable augmenta la demanda (S), les apps d'entrenament a casa (T), una nova llei d'horaris comercials (L).</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>7. Responsabilitat Social Corporativa (RSC) i ODS</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>La <span class="key">RSC</span> és la integració <b>activa i voluntària</b> de preocupacions socials i mediambientals en les operacions de l'empresa. Té un <b>doble objectiu</b>: obtenir beneficis i alhora contribuir a la societat.</p>
+      <p>S'aplica als treballadors, les cadenes de subministrament, la comunitat, l'ètica empresarial i el medi ambient. Les empreses s'han d'alinear amb els <b>17 ODS</b> (Objectius de Desenvolupament Sostenible), especialment l'<b>ODS 7</b> (energia), <b>ODS 9</b> (indústria) i <b>ODS 12</b> (consum responsable).</p>
+      <p>Eines de mesura voluntàries: el <span class="key">Balanç Social</span> i el <span class="key">Codi de Conducta</span> intern.</p>
+      <p><b>Beneficis del codi ètic:</b> a nivell <i>intern</i>, la plantilla sap com ha d'actuar, resposta àgil en conflictes i cultura empresarial pròpia; a nivell <i>extern</i>, millor imatge corporativa i més fidelitat de clients, proveïdors i altres grups d'interès.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una empresa tèxtil que instal·la plaques solars (ODS 7), audita que els proveïdors no facin servir treball infantil i publica cada any un balanç social amb aquestes dades. No està obligada per llei: és RSC.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== UNITAT 3 ===================== -->
+<section id="u3" class="tab">
+  <div class="unit-head">
+    <h2>Unitat 3 · L'organització a l'empresa</h2>
+    <p>Àrees funcionals, procés administratiu, estructures, organigrames, lideratge i control.</p>
+  </div>
+
+  <div class="topic">
+    <h3>1. Les àrees funcionals</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>L'empresa es divideix en departaments que treballen coordinats:</p>
+      <table>
+        <tr><th>Àrea</th><th>Funcions</th></tr>
+        <tr><td><b>Comercial</b></td><td>Anàlisi de mercat (detectar necessitats abans de produir) i estratègia de màrqueting (preu, publicitat, distribució).</td></tr>
+        <tr><td><b>Producció</b></td><td>Aprovisionament (comprar matèries primeres) i gestió de la producció (transformar factors en béns o serveis).</td></tr>
+        <tr><td><b>Recursos humans</b></td><td>Selecció de personal i gestió (contractació, formació, motivació, nòmines, clima laboral). El personal és el <b>capital humà</b>, gran font d'avantatge competitiu.</td></tr>
+        <tr><td><b>Finançament i inversió</b></td><td>Captació de fons (triar la millor font de finançament) i inversions (on invertir per obtenir rendiment) + control econòmic.</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>A una fàbrica de galetes: Comercial estudia si agraden les galetes sense sucre; Producció compra farina i les fabrica; RRHH contracta forners; Finances demana un préstec per comprar un forn nou.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>2. El procés administratiu</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Són les funcions de la direcció per assolir els objectius, en dues fases:</p>
+      <table>
+        <tr><th>Fase mecànica (teòrica: <i>què</i> s'ha de fer)</th><th>Fase dinàmica (pràctica: <i>com</i> fer-ho)</th></tr>
+        <tr><td><b>Planificació:</b> objectius, estratègies, pressupostos.<br><b>Organització:</b> dividir el treball, jerarquitzar, descriure funcions.</td>
+            <td><b>Gestió o direcció:</b> decidir, comunicar, liderar.<br><b>Control:</b> estàndards, mesurar, corregir.</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Un viatge de fi de curs: decidir destí i pressupost (planificació) i repartir tasques (organització) és fase mecànica; durant el viatge, el coordinador pren decisions (direcció) i revisa la despesa diària (control): fase dinàmica.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>3. La planificació</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Fixar objectius, marcar estratègies i definir polítiques. Fases, amb la pregunta que responen:</p>
+      <table>
+        <tr><th>Fase</th><th>Pregunta</th></tr>
+        <tr><td>1. Anàlisi de la situació</td><td>On estem?</td></tr>
+        <tr><td>2. Determinació d'objectius</td><td>On volem arribar?</td></tr>
+        <tr><td>3. Avaluació i elecció d'alternatives (costos i riscos)</td><td>Com arribarem allà?</td></tr>
+        <tr><td>4. Formulació de plans</td><td>Quines accions durem a terme?</td></tr>
+        <tr><td>5. Pressupost</td><td>Amb quins recursos comptem?</td></tr>
+        <tr><td>6. Acció i control</td><td>Ho estem aconseguint?</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una botiga online veu que les vendes cauen (1), vol créixer un 15% (2), dubta entre baixar preus o fer anuncis a TikTok i tria TikTok perquè és més barat (3), planifica 3 campanyes (4), hi destina 2.000 € (5) i revisa resultats cada mes (6).</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>4. L'organització i la comunicació</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Dissenya l'estructura: tasques, responsabilitats i autoritat.</p>
+      <ul>
+        <li><span class="key">Formal:</span> estructura oficial i intencional.</li>
+        <li><span class="key">Informal:</span> relacions socials espontànies, no previstes per la direcció.</li>
+      </ul>
+      <p><b>Criteris de departamentalització:</b> per <b>funcions</b> (finances, RRHH...), per <b>productes o serveis</b>, per <b>zones geogràfiques</b> i per <b>projectes</b>.</p>
+      <p><b>Tipus de comunicació:</b> externa (clients, societat) / interna (membres); formal (oficial) / informal (confiança); vertical <b>ascendent</b> (de baix a dalt) o <b>descendent</b> (de dalt a baix) i <b>horitzontal</b> (mateix nivell).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Inditex s'organitza per productes/marques (Zara, Pull&amp;Bear, Bershka) i dins de cada marca per zones geogràfiques. Un treballador que envia un informe al seu cap fa comunicació vertical ascendent; dos caps de departament que es coordinen, horitzontal.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>5. Estructures organitzatives</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <table>
+        <tr><th>Estructura</th><th>Característica</th><th>Avantatge / Inconvenient</th></tr>
+        <tr><td><b>Lineal o jeràrquica</b></td><td>Cada treballador té <b>un sol cap</b>; principi d'unitat de comandament.</td><td>Clara i simple / rígida, poc especialitzada.</td></tr>
+        <tr><td><b>Funcional</b></td><td>Especialistes; un treballador rep ordres de <b>diversos caps</b> segons la tasca.</td><td>Especialització / confusió d'ordres.</td></tr>
+        <tr><td><b>Lineal i d'assessorament (staff)</b></td><td>Jerarquia lineal + <b>assessors sense autoritat</b> de comandament.</td><td>Decisions millor informades / possibles conflictes.</td></tr>
+        <tr><td><b>TEAL</b></td><td><b>Autogestió</b>, sense jerarquia, prioritza productivitat i benestar.</td><td>Motivació / difícil en empreses grans.</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>L'exèrcit és lineal pur. Un hospital on un infermer rep ordres del metge i del cap d'infermeria s'acosta al funcional. Una empresa amb un advocat extern que aconsella el director però no mana ningú té staff. Un <b>institut TEAL</b> seria aquell on alumnes i professors s'autoorganitzen en equips per projectes sense cap de departament.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>6. L'organigrama</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Representació gràfica de l'estructura organitzativa.</p>
+      <ul>
+        <li><b>Per la forma:</b> <span class="key">vertical</span> (autoritat a dalt), <span class="key">horitzontal</span> (direcció a l'esquerra, subordinats a la dreta), <span class="key">radial</span> (direcció al centre, impacte visual).</li>
+        <li><b>Per finalitat:</b> informatius (globals) o d'anàlisi (detallats).</li>
+        <li><b>Per extensió:</b> generals o detallats per departament.</li>
+        <li><b>Per contingut:</b> estructurals, de personal o funcionals.</li>
+      </ul>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Un organigrama amb el director general a dalt i, a sota, els caps de Comercial, Producció, RRHH i Finances és <b>vertical, general i estructural</b>. Si a cada caixa hi poses el nom de la persona, passa a ser <b>de personal</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>7. La direcció i el lideratge</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>La direcció converteix la informació en acció. El <b>lideratge</b> és l'habilitat d'influir, animar i motivar la plantilla de forma voluntària.</p>
+      <table>
+        <tr><th>Estil</th><th>Com actua el líder</th></tr>
+        <tr><td><b>Autocràtic</b></td><td>Decideix sol, supervisa directament, exigeix obediència.</td></tr>
+        <tr><td><b>Democràtic</b></td><td>Decisions col·lectives sota la seva supervisió; afavoreix la participació.</td></tr>
+        <tr><td><b>Liberal</b> (<i>laissez-faire</i>)</td><td>Llibertat total als subordinats; mínima intervenció.</td></tr>
+      </table>
+      <p><b>Teories X i Y (Douglas McGregor):</b></p>
+      <table>
+        <tr><th>Teoria X</th><th>Teoria Y</th></tr>
+        <tr><td>Les persones són mandroses, eviten la feina i la responsabilitat i només treballen per diners o per por al càstig. Cal controlar-les.</td>
+            <td>Les persones gaudeixen treballant, busquen responsabilitat, són creatives i s'automotiven si se'ls dona confiança.</td></tr>
+        <tr><td>➜ Lligada a l'estil <b>autocràtic</b>.</td><td>➜ Lligada als estils <b>democràtic</b> i <b>liberal</b>.</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Un encarregat que fitxa cada minut de pausa i amenaça amb sancions pensa segons la Teoria X (autocràtic). Una startup que deixa triar horaris i projectes perquè confia en l'equip aplica la Teoria Y (democràtic/liberal).</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>8. El control</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Verifica periòdicament que l'execució s'ajusta a la planificació. Fases:</p>
+      <ul>
+        <li>1. <b>Marcar estàndards</b> (resultats previstos)</li>
+        <li>2. <b>Mesurar dades reals</b></li>
+        <li>3. <b>Comparar</b> i identificar desviacions i causes</li>
+        <li>4. <b>Corregir</b> desviacions</li>
+      </ul>
+      <p><b>Tècniques:</b> pressupostos (control econòmic), auditories internes o externes (comptes, operativa, ecoauditoria) i estadística (dades històriques i pronòstics).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Una fruiteria preveu vendre 3.000 € al mes (estàndard), en ven 2.400 (mesura), detecta un 20% de desviació perquè ha obert un supermercat al costat (comparar) i decideix fer repartiment a domicili (corregir).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== UNITAT 4 ===================== -->
+<section id="u4" class="tab">
+  <div class="unit-head">
+    <h2>Unitat 4 · L'activitat comercial i el màrqueting</h2>
+    <p>Mercat, pla de màrqueting, investigació, segmentació, les 4P i el màrqueting digital.</p>
+  </div>
+
+  <div class="topic">
+    <h3>1. El mercat i la quota de mercat</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Elements del mercat: <b>oferta</b> (venedors), <b>producte</b> i <b>demanda</b> (compradors). Tipus de demanda:</p>
+      <ul>
+        <li><span class="key">Demanda actual de l'empresa:</span> els clients que té ara.</li>
+        <li><span class="key">Demanda potencial:</span> qui podria ser client en el futur.</li>
+        <li><span class="key">Demanda de mercat:</span> tothom que compra aquest tipus de producte.</li>
+      </ul>
+      <p>La <span class="key">quota de mercat</span> és la proporció de vendes de l'empresa sobre el total del mercat (en unitats o en euros):</p>
+      <div class="formula">Quota de mercat = (Vendes empresa / Vendes totals mercat) × 100</div>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>A Espanya es venen 40 milions de mòbils i Xiaomi en ven 10 milions → 10/40 × 100 = <b>25%</b>.</p>
+      <p>Ordinadors 2020 (total 302,6 M): Lenovo 72,7 → <b>24%</b>; HP 67,6 → <b>22,4%</b>; Dell 50,3 → <b>16,6%</b>; Apple 23,1 → <b>7,6%</b>; Acer 21 → <b>6,9%</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>2. La funció comercial i la seva evolució</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>La funció comercial són les activitats per <b>detectar necessitats</b> dels clients i <b>comercialitzar i vendre</b> de manera rendible. Ha evolucionat segons la relació entre oferta i demanda:</p>
+      <table>
+        <tr><th>Època</th><th>Orientació</th><th>Situació</th><th>Objectiu</th></tr>
+        <tr><td>1800-1900</td><td>Producció</td><td>Demanda &gt; oferta, competència mínima</td><td>Reduir costos</td></tr>
+        <tr><td>1900-1930</td><td>Producte</td><td>Demanda = oferta, competència mitjana</td><td>Augmentar producció</td></tr>
+        <tr><td>1930-1950</td><td>Vendes</td><td>Oferta &gt; demanda, gran competència</td><td>Tècniques agressives de venda</td></tr>
+        <tr><td>Des de 1950</td><td>Màrqueting</td><td>Client al centre</td><td>Conèixer les necessitats i oferir el que desitja</td></tr>
+      </table>
+      <p>Avui el màrqueting <b>parteix de les necessitats del consumidor</b> i crea productes per satisfer-les de forma rendible.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Ford fabricava el Model T "de qualsevol color mentre sigui negre" (orientació a la producció). Avui una marca de cotxes fa enquestes i et deixa configurar color, extres i motor (orientació al màrqueting).</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>3. El pla de màrqueting</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Document que recull tota l'activitat comercial en dues parts:</p>
+      <p><b>A) Màrqueting estratègic</b> (analitzar i decidir):</p>
+      <ul>
+        <li>1. <b>Anàlisi DAFO</b> – On som?</li>
+        <li>2. <b>Fixació d'objectius SMART</b> – On volem anar?</li>
+        <li>3. <b>Disseny d'estratègies</b> (segmentació i posicionament) – Com hi arribarem?</li>
+      </ul>
+      <p><b>B) Màrqueting operatiu</b> (portar-ho a la pràctica):</p>
+      <ul>
+        <li>4. <b>Màrqueting mix (4P)</b> – Quines accions executarem?</li>
+        <li>5. <b>Projeccions financeres</b> (punt mort) – Quan guanyarem?</li>
+        <li>6. <b>Control</b> – Ho estem aconseguint? (+ pressupostos, itineraris i mesuraments)</li>
+      </ul>
+      <p><b>DAFO:</b> l'anàlisi <i>intern</i> dona Fortaleses i Debilitats; l'<i>extern</i> (PEST) dona Oportunitats i Amenaces.</p>
+      <div class="dafo">
+        <div class="d"><b>D</b>ebilitats – intern, negatiu: on som pitjors que la competència</div>
+        <div class="f"><b>F</b>ortaleses – intern, positiu: on som millors</div>
+        <div class="a"><b>A</b>menaces – extern, negatiu: situacions de l'entorn que ens perjudiquen</div>
+        <div class="o"><b>O</b>portunitats – extern, positiu: situacions de l'entorn que ens beneficien</div>
+      </div>
+      <p><b>SMART:</b> e<b>S</b>pecífic, <b>M</b>esurable, <b>A</b>ssolible, <b>R</b>ellevant, <b>T</b>emporal.</p>
+      <p><b>Punt mort (llindar de rendibilitat):</b> quantitat on ingressos = costos (benefici 0).</p>
+      <div class="formula">IT = P·Q &nbsp;&nbsp; CT = CF + CVMe·Q &nbsp;&nbsp;→&nbsp;&nbsp; Q* = CF / (P − CVMe)</div>
+      <p>Si Q &lt; Q* → pèrdues; si Q &gt; Q* → beneficis.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p><b>DAFO:</b> una cafeteria veu que tanquen els seus dos competidors → <b>Oportunitat</b>. Una acadèmia té pitjors professors que els rivals → <b>Debilitat</b>. Una editorial veu entrar molts competidors → <b>Amenaça</b>. Unicaja té més oficines a Màlaga que altres bancs → <b>Fortalesa</b>.</p>
+      <p><b>SMART:</b> "Vendre més" no ho és. "Augmentar un 10% les vendes online a Catalunya abans del 31 de desembre" sí.</p>
+      <p><b>Punt mort:</b> CF = 6.000 €, P = 20 €, CVMe = 8 € → Q* = 6.000 / 12 = <b>500 unitats</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>4. La investigació de mercats</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Obtenir i analitzar informació per entendre com actuen consumidors i competència. <b>6 fases:</b></p>
+      <ul>
+        <li>1. Definir el problema i els objectius</li>
+        <li>2. Desenvolupar el pla d'investigació (fonts, mètodes, mostreig)</li>
+        <li>3. Recopilar la informació</li>
+        <li>4. Analitzar-la (tabular, mitjanes, estadística)</li>
+        <li>5. Presentar els resultats (i recomanacions)</li>
+        <li>6. Prendre decisions</li>
+      </ul>
+      <p><b>Fonts:</b> <span class="key">secundàries</span> (ja existeixen, recollides per a un altre propòsit: estadístiques, estudis) i <span class="key">primàries</span> (originals, creades per a aquesta recerca).</p>
+      <table>
+        <tr><th>Mètode</th><th>En què consisteix</th></tr>
+        <tr><td>Enquesta</td><td>El més usat; preguntes (sovint tancades) sobre preferències, satisfacció...</td></tr>
+        <tr><td>Observació</td><td>Mirar discretament com compren o consumeixen.</td></tr>
+        <tr><td>Experimentació</td><td>Provocar canvis per veure relacions causa-efecte.</td></tr>
+        <tr><td>Etnogràfica</td><td>Acompanyar una persona/família en el seu dia a dia.</td></tr>
+        <tr><td>Focus group</td><td>6-10 persones discuteixen un tema a canvi d'una petita retribució.</td></tr>
+        <tr><td>Entrevista en profunditat</td><td>Conèixer l'opinió real, perquè les accions no sempre coincideixen amb les respostes.</td></tr>
+      </table>
+      <p><b>Pla de mostreig:</b> decidir la mida de la mostra i com se selecciona.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Reunir 8 persones per parlar del que valoren d'un mòbil → <b>focus group</b>. Estudiar com es comporten a la caixa del súper → <b>observació</b>. Canviar el color de l'envàs en una botiga i comparar vendes → <b>experimentació</b>. Preguntes de resposta curta → <b>enquesta</b>. Fer servir dades de l'INE → font <b>secundària</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>5. Segmentació, targeting i posicionament (STP)</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p><b>Segmentar</b> = dividir el mercat en grups amb necessitats semblants. Passos: <span class="key">S</span>egmentació → <span class="key">T</span>argeting (triar segment meta) → <span class="key">P</span>osicionament (comunicar els beneficis).</p>
+      <p><b>Criteris:</b> geogràfics (zones), demogràfics (edat, gènere), socioeconòmics (renda, educació), psicogràfics (personalitat, estil de vida, valors), conductuals (fidelitat, freqüència, ocasió, beneficis buscats).</p>
+      <table>
+        <tr><th>Estratègia</th><th>Què fa</th><th>Avantatge</th><th>Inconvenient</th></tr>
+        <tr><td>Indiferenciada</td><td>Mateixa estratègia per a tots</td><td>Costos baixos</td><td>No s'adapta a cada client</td></tr>
+        <tr><td>Diferenciada</td><td>Una estratègia per segment</td><td>Més vendes</td><td>Més costos</td></tr>
+        <tr><td>Concentrada</td><td>Un sol segment</td><td>Alta especialització</td><td>Risc d'entrada de competidors</td></tr>
+        <tr><td>Personalitzada</td><td>Cada client individualment</td><td>S'adapta molt bé</td><td>Costos molt elevats</td></tr>
+      </table>
+      <p><b>Posicionament:</b> la percepció que volem que el client tingui del producte (més qualitat, més barat...).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Coca-Cola amb Coca-Cola, Zero i sense cafeïna → <b>diferenciada</b>. La sal de cuina igual per a tothom → <b>indiferenciada</b>. Una marca de roba només per a escaladors → <b>concentrada</b>. Un sastre a mida → <b>personalitzada</b>. Lidl es posiciona com "barat"; Apple com "premium i disseny".</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>6. El màrqueting mix: les 4P</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Instruments per atraure clients, adaptats al mercat meta: <b>Producte, Preu, Promoció i Distribució (Place)</b>. El producte és la primera decisió: sense producte no hi ha la resta.</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Nike Air Max: producte (disseny, marca, caixa), preu alt (~150 €), promoció (atletes i Instagram), distribució (botigues pròpies, web i botigues seleccionades).</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>7. El producte i el cicle de vida</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Producte = bé o servei que satisfà una necessitat. Elements:</p>
+      <ul>
+        <li><b>Atributs:</b> característiques tangibles (color, qualitat, mida).</li>
+        <li><b>Marca:</b> nom o símbol que identifica. Tipus: <b>única</b> (una per a tot), <b>múltiples</b> (una per producte), <b>blanca o del distribuïdor</b>.</li>
+        <li><b>Envàs i etiquetatge:</b> protegeix, diferencia i informa.</li>
+        <li><b>Altres serveis:</b> garantia, instal·lació, postvenda, pagament ajornat.</li>
+      </ul>
+      <table>
+        <tr><th>Fase</th><th>Vendes / beneficis</th><th>Objectiu i publicitat</th></tr>
+        <tr><td>Introducció</td><td>Creixen lentament, pot haver-hi pèrdues</td><td>Donar-lo a conèixer · publicitat <b>informativa</b></td></tr>
+        <tr><td>Creixement</td><td>Creixement ràpid de vendes i beneficis</td><td>Afegir característiques · publicitat <b>persuasiva</b></td></tr>
+        <tr><td>Maduresa</td><td>S'estabilitzen; més competidors</td><td>Arribar a nous segments · publicitat <b>de record</b></td></tr>
+        <tr><td>Declivi</td><td>Baixen; apareixen substitutius millors</td><td>Desaparèixer o millorar/buscar nous usos</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Procter &amp; Gamble usa <b>marques múltiples</b> (Ariel, Pantene, Gillette); Mercadona té marca <b>blanca</b> (Hacendado). Els CD estan en <b>declivi</b>; els cotxes elèctrics, en <b>creixement</b>; la Coca-Cola, en <b>maduresa</b>; les ulleres de realitat augmentada, en <b>introducció</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>8. El preu</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>És l'<b>única variable del mix que genera ingressos</b>, es pot canviar a molt curt termini i comunica el posicionament.</p>
+      <table>
+        <tr><th>Mètode</th><th>Com es fixa</th></tr>
+        <tr><td>Basat en el <b>cost</b></td><td>Cost + marge de benefici (petites empreses).</td></tr>
+        <tr><td>Basat en la <b>demanda</b></td><td>Segons el valor que el consumidor dona al producte.</td></tr>
+        <tr><td>Basat en la <b>competència</b></td><td>Superior (producte millor), inferior (pitjor qualitat o guanyar quota) o igual (producte similar, evitar guerra de preus).</td></tr>
+      </table>
+      <p><b>Productes nous:</b> <span class="key">penetració</span> (preu molt baix per robar clients ràpidament) i <span class="key">descremació</span> (preu molt alt al principi per a rendes altes; després es baixa quan la competència copia).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>L'iPhone costa uns 250 € de fabricar però es ven a 800-900 € perquè la gent el vol → <b>demanda</b>. Vodafone, Movistar i Orange amb preus similars → <b>competència</b>. Alimentació: cost + petit marge → <b>cost</b>. Una consola que surt a 600 € i al cap d'un any baixa a 450 € → <b>descremació</b>. Una plataforma nova de streaming a 2 €/mes → <b>penetració</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>9. La promoció o comunicació</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Objectius: <b>informar, persuadir i recordar</b>.</p>
+      <table>
+        <tr><th>Instrument</th><th>Què és</th><th>Avantatge / Inconvenient</th></tr>
+        <tr><td>Publicitat</td><td>Missatge massiu (TV, ràdio, revistes); objectiu a llarg termini.</td><td>Arriba a molta gent / car</td></tr>
+        <tr><td>Promoció de vendes</td><td>Estímuls a curt termini (3x2, ofertes, regals).</td><td>Compra impulsiva / no apte per a productes de prestigi</td></tr>
+        <tr><td>Venda personal</td><td>Contacte directe venedor-comprador.</td><td>Tracte personal / cal molta formació</td></tr>
+        <tr><td>Relacions públiques</td><td>Millorar la imatge: <b>patrocini</b> (suport a esdeveniments) i <b>publicity</b> (notícies no pagades).</td><td>Bona imatge / una mala interpretació perjudica</td></tr>
+        <tr><td>Marxandatge</td><td>Publicitat al punt de venda (cartells, productes a l'alçada dels ulls, llum).</td><td>Barat / pot saturar</td></tr>
+        <tr><td>Màrqueting directe</td><td>Contacte directe per correu, telèfon, internet.</td><td>Barat / pot saturar</td></tr>
+      </table>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Anunci de ràdio que explica les característiques → <b>publicitat</b>. "Compra'n un i te'n regalem un altre" → <b>promoció de vendes</b>. Red Bull organitzant curses → <b>patrocini</b>. Les llaminadures a l'alçada dels nens a la caixa → <b>marxandatge</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>10. La distribució</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p>Portar el producte al consumidor en la quantitat, el temps i el lloc que vol. Els <b>intermediaris</b> formen el <b>canal de distribució</b>: <b>majorista</b> (compra a fabricants i ven a minoristes) i <b>minorista o detallista</b> (ven al consumidor final).</p>
+      <table>
+        <tr><th>Canal</th><th>Esquema</th></tr>
+        <tr><td>Directe</td><td>Productor → Consumidor</td></tr>
+        <tr><td>Curt</td><td>Productor → Minorista → Consumidor</td></tr>
+        <tr><td>Llarg</td><td>Productor → Majorista → Minorista → Consumidor</td></tr>
+      </table>
+      <p><b>Estratègies:</b> <span class="key">intensiva</span> (molts intermediaris, productes de compra ràpida), <span class="key">selectiva</span> (pocs, productes més cars i menys freqüents), <span class="key">exclusiva</span> (un sol intermediari per zona, productes de luxe).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Un pagès que ven a la seva parada → canal <b>directe</b>. Makro ven a bars → és <b>majorista</b>. Coca-Cola a tot arreu → <b>intensiva</b>. Lacoste a botigues pròpies i El Corte Inglés → <b>selectiva</b>. Ferrari només als seus concessionaris → <b>exclusiva</b>.</p>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>11. Digitalització i TIC en el màrqueting</h3>
+    <div class="exp"><span class="lbl">Explicació</span>
+      <p><b>Avantatges per al consumidor:</b> comprar per internet 24 h i comparar preus, informar-se amb ressenyes i xarxes, interactuar amb l'empresa (subscripcions, ofertes).</p>
+      <p><b>Avantatges per a l'empresa:</b> més informació del consumidor (cookies i historial), més capacitat de venda (bàners, apps), contacte ràpid i personalitzat (xarxes, màrqueting mòbil), menys intermediaris (pot competir amb multinacionals).</p>
+      <p><b>Les 4P del màrqueting digital</b>, al voltant de la gran P de <b>People</b>: <span class="key">Personalització</span>, <span class="key">Participació</span> (implicar el consumidor), <span class="key">Peer-to-peer</span> (opinió d'altres, influencers) i <span class="key">Prediccions modelades</span> (analitzar el comportament per predir-lo).</p>
+    </div>
+    <div class="exa"><span class="lbl">Exemple</span>
+      <p>Netflix et recomana sèries pel que has vist (prediccions modelades i personalització). Un influencer que prova un producte a TikTok (peer-to-peer). Una marca que fa votar als seguidors el proper sabor (participació).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXAMEN ===================== -->
+<section id="ex" class="tab">
+  <div class="unit-head">
+    <h2>📝 Examen de prova (Unitats 2, 3 i 4)</h2>
+    <p>Part A: 20 preguntes tipus test (a, b, c, d). Part B: 6 preguntes de resposta escrita amb resposta model i autocorrecció.</p>
+  </div>
+  <div class="test" data-unit="ex">
+    <h3>Part A · Test</h3>
+    <div class="progress"><div id="exbar"></div></div>
+  </div>
+  <div class="test" id="written">
+    <h3>Part B · Preguntes de resposta escrita</h3>
+    <p style="color:var(--mut);margin-top:-6px">Escriu la teva resposta, després prem "Veure resposta model" i puntua't honestament.</p>
+  </div>
+  <div class="test" style="border-color:#111">
+    <h3>Nota final</h3>
+    <p id="final">Respon les preguntes per veure la nota.</p>
+  </div>
+</section>
+
+</main>
+<footer>Material basat en les presentacions de classe: Unitat 2 (L'emprenedoria), Unitat 3 (L'organització a l'empresa) i Tema 4 (L'activitat comercial i el màrqueting).</footer>
+
+<script>
+const T = {
+u2: [
+ [
+  {q:"Què diferencia principalment una persona emprenedora d'un treballador per compte d'altri?", o:["Té més estudis","Detecta una oportunitat i assumeix riscos econòmics","Treballa més hores","Sempre té empleats"], a:1, e:"L'emprenedor identifica una oportunitat i assumeix el risc econòmic i financer."},
+  {q:"Qui compra un negoci ja muntat d'una marca coneguda té un perfil:", o:["Visionari","Social","De franquícia","Accidental"], a:2, e:"Perfil de franquícia."},
+  {q:"Quina d'aquestes és una dificultat típica de l'emprenedor?", o:["Massa estabilitat","Incertesa financera","Excés de xarxes de suport","Poca feina"], a:1, e:"Incertesa financera, inestabilitat del mercat, sobrecàrrega de feina i poca experiència."}
+ ],
+ [
+  {q:"El terme 'knowmad' combina les paraules:", o:["Know i nomad","Knowledge i made","Know i mad","Now i nomad"], a:0, e:"Know (conèixer) + nomad (nòmada)."},
+  {q:"Quina característica NO és pròpia d'un knowmad?", o:["Autodidacte","Adaptable al canvi","Dependent d'un lloc fix de treball","Digital"], a:2, e:"Són independents i treballen en entorns digitals, no lligats a un lloc fix."}
+ ],
+ [
+  {q:"El 'sostre de vidre' fa referència a:", o:["Una llei d'igualtat","Barreres invisibles que impedeixen a les dones arribar a càrrecs directius","Un tipus de finançament","La bretxa digital"], a:1, e:"Són barreres invisibles que frenen l'accés a càrrecs de responsabilitat."},
+  {q:"Segons la Directiva (UE) 2023/970, quines empreses han de fer auditoria salarial si la bretxa supera el 5% sense justificació?", o:["Totes","Més de 50 treballadors","Més de 250 treballadors","Només les públiques"], a:2, e:"Empreses de més de 250 empleats."},
+  {q:"Segons la mateixa directiva, en una entrevista de feina:", o:["Es pot preguntar el sou anterior","No es pot preguntar l'historial salarial","S'ha d'amagar el sou","Només es diu el sou als homes"], a:1, e:"Està prohibit consultar l'historial salarial dels candidats."}
+ ],
+ [
+  {q:"La funció de l'empresari que consisteix a vigilar que es compleixen els objectius i corregir desviacions és:", o:["Planificar","Organitzar","Gestionar","Controlar"], a:3, e:"Controlar = vigilar i corregir desviacions."},
+  {q:"Dissenyar un pla d'acció després d'analitzar la situació és:", o:["Planificar","Organitzar","Gestionar","Controlar"], a:0, e:"Planificar."},
+  {q:"El CEO és:", o:["El cap de comptabilitat","Qui exerceix les funcions executives marcades per la presidència","Un assessor extern","El representant dels treballadors"], a:1, e:"Chief Executive Officer: director executiu."}
+ ],
+ [
+  {q:"Quina d'aquestes NO és una de les 5 forces de Porter?", o:["Poder de negociació dels clients","Amenaça de productes substitutius","Inflació","Rivalitat entre competidors existents"], a:2, e:"La inflació és un factor econòmic del macroentorn (PESTEL)."},
+  {q:"L'arribada de VTC com Uber per als taxistes és, segons Porter:", o:["Poder dels proveïdors","Amenaça de nous competidors","Poder dels clients","Factor legal"], a:1, e:"Nous competidors que entren al sector."},
+  {q:"El microentorn inclou factors:", o:["Que afecten totes les empreses per igual","Amb incidència directa en l'empresa","Només polítics","Que l'empresa controla totalment"], a:1, e:"Clients, proveïdors, competidors, intermediaris... amb incidència directa."}
+ ],
+ [
+  {q:"Una pujada dels tipus d'interès és un factor PESTEL de tipus:", o:["Polític","Econòmic","Legal","Tecnològic"], a:1, e:"Tipus d'interès i inflació són factors econòmics."},
+  {q:"La moda de la vida saludable és un factor:", o:["Sociocultural","Ecològic","Legal","Polític"], a:0, e:"Estil de vida = factor sociocultural."},
+  {q:"El macroentorn es caracteritza perquè l'empresa:", o:["El controla","No el pot controlar","El crea","Només l'afecta si és gran"], a:1, e:"Són factors externs no controlables."}
+ ],
+ [
+  {q:"La RSC es caracteritza per ser:", o:["Obligatòria per llei","Activa i voluntària","Només mediambiental","Exclusiva de multinacionals"], a:1, e:"És la integració activa i voluntària de preocupacions socials i mediambientals."},
+  {q:"Una eina voluntària per mesurar les accions de RSC és:", o:["El balanç de situació","El balanç social","L'organigrama","La quota de mercat"], a:1, e:"El balanç social (i el codi de conducta intern)."},
+  {q:"Quin és un benefici EXTERN de tenir un codi ètic?", o:["Resposta àgil en conflictes","Cultura empresarial pròpia","Millor imatge corporativa","La plantilla sap com actuar"], a:2, e:"Extern: imatge corporativa i fidelitat de grups d'interès."}
+ ]
+],
+u3: [
+ [
+  {q:"L'aprovisionament de matèries primeres correspon a l'àrea de:", o:["Comercial","Producció","Recursos humans","Finançament"], a:1, e:"Producció: aprovisionament i gestió de la producció."},
+  {q:"Decidir si demanar un préstec o ampliar capital és tasca de l'àrea de:", o:["Comercial","Producció","Recursos humans","Finançament i inversió"], a:3, e:"Captació de fons: finançament i inversió."},
+  {q:"El personal de l'empresa forma el:", o:["Capital social","Capital humà","Actiu fix","Microentorn"], a:1, e:"Capital humà, font d'avantatge competitiu."}
+ ],
+ [
+  {q:"Quines funcions formen la fase mecànica del procés administratiu?", o:["Gestió i control","Planificació i organització","Organització i control","Planificació i gestió"], a:1, e:"Fase mecànica (què fer): planificació i organització."},
+  {q:"La fase dinàmica respon a la pregunta:", o:["Què s'ha de fer?","Com dur-ho a terme?","Qui és el cap?","Quant costa?"], a:1, e:"Fase dinàmica = part pràctica: gestió i control."}
+ ],
+ [
+  {q:"La pregunta 'On volem arribar?' correspon a la fase de:", o:["Anàlisi de la situació","Determinació d'objectius","Pressupost","Control"], a:1, e:"Determinació d'objectius."},
+  {q:"Quantificar el pla en termes econòmics és la fase de:", o:["Formulació de plans","Pressupost","Avaluació d'alternatives","Acció i control"], a:1, e:"Pressupost: amb quins recursos comptem."},
+  {q:"Quina és la primera fase de la planificació?", o:["Formulació de plans","Determinació d'objectius","Anàlisi de la situació","Pressupost"], a:2, e:"Primer s'analitza on som."}
+ ],
+ [
+  {q:"Les relacions socials espontànies no previstes per la direcció formen l'organització:", o:["Formal","Informal","Lineal","Funcional"], a:1, e:"Organització informal."},
+  {q:"Organitzar una empresa en divisions Europa, Àsia i Amèrica és departamentalitzar per:", o:["Funcions","Productes","Zones geogràfiques","Projectes"], a:2, e:"Zones geogràfiques."},
+  {q:"Un treballador que envia un informe al seu cap fa comunicació:", o:["Vertical descendent","Vertical ascendent","Horitzontal","Externa"], a:1, e:"De baix a dalt: vertical ascendent."}
+ ],
+ [
+  {q:"En quina estructura un treballador rep ordres de diversos caps especialistes?", o:["Lineal","Funcional","Staff","TEAL"], a:1, e:"Funcional."},
+  {q:"Els assessors sense autoritat de comandament són propis de l'estructura:", o:["Lineal i d'assessorament (staff)","Funcional","TEAL","Lineal pura"], a:0, e:"L'staff assessora però no mana."},
+  {q:"L'organització TEAL es basa en:", o:["Jerarquia estricta","Autogestió i benestar","Diversos caps especialistes","Assessors externs"], a:1, e:"Autogestió, productivitat i benestar sense jerarquia."}
+ ],
+ [
+  {q:"Un organigrama amb la direcció al centre és:", o:["Vertical","Horitzontal","Radial","Funcional"], a:2, e:"Radial: els nivells alts al centre."},
+  {q:"Un organigrama que mostra el nom de cada persona a cada càrrec és, pel contingut:", o:["Estructural","De personal","Funcional","Informatiu"], a:1, e:"De personal."},
+  {q:"En l'organigrama horitzontal, la direcció se situa:", o:["A dalt","Al centre","A l'esquerra","A la dreta"], a:2, e:"Direcció a l'esquerra, subordinats a la dreta."}
+ ],
+ [
+  {q:"Un líder que decideix sol i exigeix obediència té un estil:", o:["Democràtic","Liberal","Autocràtic","Participatiu"], a:2, e:"Autocràtic."},
+  {q:"Segons la Teoria Y de McGregor, els treballadors:", o:["Eviten la feina","Només treballen per por","Busquen responsabilitat i s'automotiven","Necessiten control constant"], a:2, e:"La Teoria Y els veu responsables i motivats."},
+  {q:"Un líder que dona llibertat total i gairebé no intervé té un estil:", o:["Liberal","Autocràtic","Democràtic","Teoria X"], a:0, e:"Liberal (laissez-faire)."}
+ ],
+ [
+  {q:"Quina és la primera fase del control?", o:["Corregir desviacions","Mesurar dades reals","Marcar estàndards","Comparar resultats"], a:2, e:"Primer es marquen estàndards."},
+  {q:"Les auditories i els pressupostos són tècniques de:", o:["Planificació","Organització","Control","Direcció"], a:2, e:"Tècniques de control."},
+  {q:"Una ecoauditoria és un tipus de:", o:["Pressupost","Auditoria","Estadística","Organigrama"], a:1, e:"Auditoria (de comptes, operativa o ecoauditoria)."}
+ ]
+],
+u4: [
+ [
+  {q:"Una empresa ven 30.000 unitats en un mercat de 120.000. La seva quota de mercat és:", o:["4%","25%","30%","40%"], a:1, e:"30.000/120.000 × 100 = 25%."},
+  {q:"Les persones que en un futur podrien comprar el producte de l'empresa formen la demanda:", o:["Actual","Potencial","De mercat","Total"], a:1, e:"Demanda potencial."},
+  {q:"Si compres un mòbil Huawei, formes part de la demanda ___ de Huawei:", o:["Actual","Potencial","Indirecta","Futura"], a:0, e:"Ets client ara: demanda actual."}
+ ],
+ [
+  {q:"L'orientació a les vendes (1930-1950) es caracteritza per:", o:["Demanda > oferta","Oferta > demanda i tècniques agressives de venda","Conèixer necessitats del client","Reduir costos"], a:1, e:"Excés d'oferta → vendes agressives."},
+  {q:"L'enfocament actual del màrqueting parteix de:", o:["La capacitat de producció","Les necessitats del consumidor","El preu de la competència","Els costos"], a:1, e:"Detectar necessitats i crear productes per satisfer-les."}
+ ],
+ [
+  {q:"En el DAFO, l'anàlisi extern ens dona:", o:["Debilitats i fortaleses","Oportunitats i amenaces","Fortaleses i oportunitats","Debilitats i amenaces"], a:1, e:"Extern: oportunitats i amenaces."},
+  {q:"Una empresa té CF = 10.000 €, P = 25 € i CVMe = 15 €. El punt mort és:", o:["400 u.","666 u.","1.000 u.","250 u."], a:2, e:"10.000 / (25 − 15) = 1.000 unitats."},
+  {q:"El màrqueting mix forma part del màrqueting:", o:["Estratègic","Operatiu","Intern","Extern"], a:1, e:"Operatiu: fases 4 (mix), 5 (projeccions) i 6 (control)."}
+ ],
+ [
+  {q:"Fer servir dades de l'INE en una investigació és utilitzar fonts:", o:["Primàries","Secundàries","Experimentals","Qualitatives"], a:1, e:"Ja existeixen: secundàries."},
+  {q:"Un grup de 6-10 persones que discuteix un producte a canvi d'una petita retribució és:", o:["Enquesta","Entrevista en profunditat","Focus group","Observació"], a:2, e:"Focus group."},
+  {q:"Estudiar la reacció dels consumidors davant d'un canvi en el producte és:", o:["Observació","Experimentació","Enquesta","Etnografia"], a:1, e:"Experimentació: causa-efecte."}
+ ],
+ [
+  {q:"Dirigir-se a un sol segment de mercat és una estratègia:", o:["Indiferenciada","Diferenciada","Concentrada","Personalitzada"], a:2, e:"Concentrada."},
+  {q:"Segmentar per nivell de renda és un criteri:", o:["Geogràfic","Demogràfic","Socioeconòmic","Conductual"], a:2, e:"Socioeconòmic."},
+  {q:"Seleccionar el segment al qual ens dirigirem s'anomena:", o:["Segmentació","Targeting","Posicionament","Diversificació"], a:1, e:"Targeting (segment meta)."}
+ ],
+ [
+  {q:"Quines són les 4P del màrqueting mix?", o:["Producte, preu, promoció, distribució","Producte, persones, preu, publicitat","Pla, preu, promoció, posicionament","Producte, preu, procés, persones"], a:0, e:"Producte, Preu, Promoció i Place (distribució)."},
+  {q:"Quina és la primera decisió del màrqueting mix?", o:["Preu","Producte","Promoció","Distribució"], a:1, e:"Sense producte no hi ha la resta."}
+ ],
+ [
+  {q:"En quina fase del cicle de vida es fa publicitat persuasiva?", o:["Introducció","Creixement","Maduresa","Declivi"], a:1, e:"Creixement: persuasiva."},
+  {q:"Hacendado de Mercadona és un exemple de:", o:["Marca única","Marques múltiples","Marca blanca o del distribuïdor","Marca de fabricant"], a:2, e:"Marca blanca."},
+  {q:"A la fase de declivi:", o:["Augmenten competidors i promoció","El producte pot desaparèixer o buscar nous usos","Les vendes s'estabilitzen","Les vendes creixen ràpid"], a:1, e:"Baixen vendes; desaparèixer o millorar."}
+ ],
+ [
+  {q:"Fixar un preu molt alt al principi i baixar-lo quan la competència copia és:", o:["Penetració","Descremació","Preu basat en el cost","Preu psicològic"], a:1, e:"Descremació."},
+  {q:"L'única variable del màrqueting mix que proporciona ingressos és:", o:["Producte","Preu","Promoció","Distribució"], a:1, e:"El preu."},
+  {q:"Vodafone, Movistar i Orange posen preus similars. Quin mètode fan servir?", o:["Cost","Demanda","Competència","Descremació"], a:2, e:"Basat en la competència."}
+ ],
+ [
+  {q:"Un 3x2 al supermercat és:", o:["Publicitat","Promoció de vendes","Relacions públiques","Venda personal"], a:1, e:"Promoció de vendes."},
+  {q:"Les notícies sobre l'empresa als mitjans que l'empresa no paga s'anomenen:", o:["Publicitat","Patrocini","Publicity","Marxandatge"], a:2, e:"Publicity."},
+  {q:"Posar un producte a l'alçada dels ulls a la botiga és:", o:["Marxandatge","Màrqueting directe","Venda personal","Patrocini"], a:0, e:"Marxandatge (punt de venda)."}
+ ],
+ [
+  {q:"Ferrari ven només als seus concessionaris. Quina distribució fa?", o:["Intensiva","Selectiva","Exclusiva","Directa"], a:2, e:"Exclusiva."},
+  {q:"Productor → Minorista → Consumidor és un canal:", o:["Directe","Curt","Llarg","Exclusiu"], a:1, e:"Canal curt."},
+  {q:"Makro, que ven a bars i restaurants, és:", o:["Minorista","Majorista","Detallista","Fabricant"], a:1, e:"Majorista."}
+ ],
+ [
+  {q:"Quina de les 4P del màrqueting digital fa referència als influencers?", o:["Personalització","Participació","Peer-to-peer","Prediccions modelades"], a:2, e:"Peer-to-peer."},
+  {q:"Les cookies permeten a l'empresa:", o:["Reduir impostos","Crear un perfil de consum del client","Eliminar intermediaris","Fixar preus"], a:1, e:"Obtenir millor informació del consumidor."}
+ ]
+]
+};
+
+const Q = {
+ex: [
+ {q:"Una persona que obre un negoci per tenir un horari flexible i viure tranquil·lament té un perfil emprenedor:", o:["D'alt creixement","D'estil de vida","Social","De franquícia"], a:1, e:"Perfil d'estil de vida."},
+ {q:"Quina mesura NO inclou la Directiva (UE) 2023/970?", o:["Indicar el salari a les ofertes","Prohibir preguntar l'historial salarial","Auditories si la bretxa supera el 5%","Quotes obligatòries del 50% de dones a consells"], a:3, e:"La directiva tracta la igualtat retributiva, no quotes de consells."},
+ {q:"L'arribada de VTC com Uber per als taxistes és, segons Porter:", o:["Poder dels proveïdors","Amenaça de nous competidors","Poder dels clients","Factor legal"], a:1, e:"Nous competidors que entren al sector."},
+ {q:"Una nova llei que obliga a reduir els plàstics és un factor PESTEL:", o:["Social","Tecnològic","Legal","Econòmic"], a:2, e:"Normativa = factor legal (amb vessant ecològic)."},
+ {q:"Els ODS especialment destacats per a l'empresa al material són:", o:["1, 2 i 3","7, 9 i 12","4, 5 i 6","13, 14 i 15"], a:1, e:"ODS 7 (energia), 9 (indústria) i 12 (consum responsable)."},
+ {q:"La selecció i gestió del personal és funció de l'àrea de:", o:["Producció","Comercial","Recursos humans","Finançament"], a:2, e:"Recursos humans."},
+ {q:"La gestió o direcció i el control formen la fase:", o:["Mecànica","Dinàmica","Estratègica","Operativa"], a:1, e:"Fase dinàmica (com dur-ho a terme)."},
+ {q:"Organitzar una empresa en divisions Europa, Àsia i Amèrica és departamentalitzar per:", o:["Funcions","Productes","Zones geogràfiques","Projectes"], a:2, e:"Zones geogràfiques."},
+ {q:"Un cap de vendes que dona instruccions al seu equip fa comunicació:", o:["Vertical ascendent","Vertical descendent","Horitzontal","Informal"], a:1, e:"De dalt a baix: vertical descendent."},
+ {q:"L'organització TEAL es basa en:", o:["Jerarquia estricta","Autogestió i benestar","Diversos caps especialistes","Assessors externs"], a:1, e:"Autogestió, productivitat i benestar sense jerarquia."},
+ {q:"Un directiu que pensa que els treballadors són mandrosos i cal vigilar-los segueix:", o:["La Teoria Y","La Teoria X","L'estil liberal","L'estil democràtic"], a:1, e:"Teoria X."},
+ {q:"Les auditories i els pressupostos són tècniques de:", o:["Planificació","Organització","Control","Direcció"], a:2, e:"Tècniques de control."},
+ {q:"Un objectiu SMART ha de ser:", o:["Sorprenent, Moral, Ambiciós, Ràpid, Total","Específic, Mesurable, Assolible, Rellevant, Temporal","Senzill, Massiu, Agressiu, Real, Tècnic","Cap és correcta"], a:1, e:"Específic, Mesurable, Assolible, Rellevant i Temporal."},
+ {q:"Un banc que té moltes més oficines a la zona que la competència té una:", o:["Debilitat","Amenaça","Fortalesa","Oportunitat"], a:2, e:"És intern i favorable: fortalesa."},
+ {q:"Estudiar com reaccionen els consumidors si canvies una característica del producte és:", o:["Observació","Experimentació","Enquesta","Etnografia"], a:1, e:"Experimentació: relacions causa-efecte."},
+ {q:"Segmentar per nivell de renda és un criteri:", o:["Geogràfic","Demogràfic","Socioeconòmic","Conductual"], a:2, e:"Socioeconòmic (renda, educació)."},
+ {q:"Hacendado de Mercadona és un exemple de:", o:["Marca única","Marques múltiples","Marca blanca o del distribuïdor","Marca de fabricant"], a:2, e:"Marca blanca."},
+ {q:"L'única variable del màrqueting mix que proporciona ingressos és:", o:["Producte","Preu","Promoció","Distribució"], a:1, e:"El preu."},
+ {q:"Les notícies sobre l'empresa als mitjans que l'empresa no paga s'anomenen:", o:["Publicitat","Patrocini","Publicity","Marxandatge"], a:2, e:"Publicity (relacions públiques)."},
+ {q:"Makro, que ven a bars i restaurants, és:", o:["Minorista","Majorista","Detallista","Fabricant"], a:1, e:"Majorista: compra al fabricant i ven a altres negocis."}
+]
+};
+
+const W = [
+ {q:"1. (Unitat 4 · càlcul) Una empresa té uns costos fixos de 24.000 €, un cost variable unitari de 12 € i ven cada producte a 20 €. a) Calcula el punt mort. b) Quin benefici obté si ven 4.000 unitats?",
+  m:"a) Q* = CF / (P − CVMe) = 24.000 / (20 − 12) = <b>3.000 unitats</b>.<br>b) B = IT − CT = 20·4.000 − (24.000 + 12·4.000) = 80.000 − 72.000 = <b>8.000 € de benefici</b>. Com que 4.000 > 3.000, té beneficis."},
+ {q:"2. (Unitat 4 · càlcul) El mercat de patinets elèctrics a Catalunya és de 80.000 unitats. L'empresa A en ven 20.000 i la B 12.000. Calcula les quotes de mercat i explica què és la diferència entre demanda actual, potencial i de mercat.",
+  m:"Quota A = 20.000/80.000 × 100 = <b>25%</b>. Quota B = 12.000/80.000 × 100 = <b>15%</b>.<br>Demanda actual: els clients que l'empresa té ara. Demanda potencial: els que podrien ser clients en el futur. Demanda de mercat: totes les persones que compren aquest producte (80.000)."},
+ {q:"3. (Unitat 4) Fes un DAFO d'una botiga de bicicletes de barri amb un element a cada quadrant i explica quins són interns i quins externs.",
+  m:"Exemple vàlid: <b>D</b>: preus més alts que les grans superfícies (intern). <b>F</b>: taller de reparació propi i tracte personal (intern). <b>A</b>: venda online de grans marques (extern). <b>O</b>: l'ajuntament construeix nous carrils bici (extern).<br>Fortaleses i debilitats surten de l'anàlisi intern; oportunitats i amenaces, de l'extern (PEST)."},
+ {q:"4. (Unitat 3) Explica les Teories X i Y de McGregor i relaciona cadascuna amb un estil de lideratge.",
+  m:"<b>Teoria X:</b> considera que les persones són mandroses, eviten responsabilitats i només treballen per diners o per por; cal control i supervisió → estil <b>autocràtic</b>.<br><b>Teoria Y:</b> considera que les persones gaudeixen treballant, busquen responsabilitat, són creatives i s'automotiven → estils <b>democràtic</b> i <b>liberal</b>."},
+ {q:"5. (Unitat 2) Defineix el microentorn i el macroentorn i indica amb quina eina s'analitza cadascun. Posa un exemple de cada.",
+  m:"<b>Microentorn</b> (entorn específic): factors amb incidència directa en l'empresa (clients, proveïdors, competidors, intermediaris...). S'analitza amb les <b>5 forces de Porter</b>. Ex.: un proveïdor únic de xips apuja preus.<br><b>Macroentorn</b> (entorn general): factors externs que afecten totes les empreses i no es poden controlar. S'analitza amb la <b>PESTEL</b>. Ex.: puja la inflació (factor econòmic)."},
+ {q:"6. (Unitat 4) Explica els tres tipus de canal de distribució segons la longitud i les tres estratègies de distribució, amb un exemple de cada estratègia.",
+  m:"<b>Canals:</b> directe (productor → consumidor), curt (productor → minorista → consumidor), llarg (productor → majorista → minorista → consumidor).<br><b>Estratègies:</b> intensiva, molts intermediaris (Coca-Cola); selectiva, pocs intermediaris per a productes més cars (Lacoste); exclusiva, un sol intermediari per zona per a productes de luxe (Ferrari)."}
+];
+
+const L = ["a","b","c","d"];
+const state = {exA:{}, exB:{}};
+
+function buildMCQ(container, list, key){
+  let score = {ok:0, done:0};
+  const sc = document.createElement("div"); sc.className="score";
+  list.forEach((it,i)=>{
+    const d = document.createElement("div"); d.className="q";
+    d.innerHTML = `<p>${i+1}. ${it.q}</p>`;
+    const fb = document.createElement("div"); fb.className="fb";
+    it.o.forEach((op,j)=>{
+      const b = document.createElement("button"); b.className="opt";
+      b.textContent = `${L[j]}) ${op}`;
+      b.onclick = ()=>{
+        d.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+        d.querySelectorAll(".opt")[it.a].classList.add("right");
+        const good = j===it.a;
+        if(!good) b.classList.add("wrong");
+        fb.className = "fb show " + (good?"good":"bad");
+        fb.innerHTML = (good?"✅ Correcte. ":"❌ Incorrecte. La resposta és "+L[it.a]+". ") + it.e;
+        score.done++; if(good) score.ok++;
+        sc.textContent = `Puntuació: ${score.ok} / ${list.length}` + (score.done===list.length ? `  ·  ${Math.round(score.ok/list.length*100)}%` : "");
+        if(key==="ex"){ state.exA = score; document.getElementById("exbar").style.width = (score.done/list.length*100)+"%"; updateFinal(); }
+      };
+      d.appendChild(b);
+    });
+    d.appendChild(fb);
+    container.appendChild(d);
+  });
+  sc.textContent = `Puntuació: 0 / ${list.length}`;
+  container.appendChild(sc);
+  const r = document.createElement("button"); r.className="btn reset"; r.textContent="↺ Tornar a començar";
+  r.style.marginTop="10px";
+  r.onclick = ()=>{ container.querySelectorAll(".q,.score,.btn.reset").forEach(n=>n.remove()); if(key==="ex"){state.exA={};document.getElementById("exbar").style.width="0";updateFinal();} buildMCQ(container,list,key); };
+  container.appendChild(r);
+}
+
+["u2","u3","u4"].forEach(u=>{
+  document.querySelectorAll("#"+u+" .topic").forEach((tp,i)=>{
+    const t=document.createElement("div"); t.className="mini";
+    t.innerHTML="<h4>🧪 Test d'aquest apartat</h4>"; tp.appendChild(t);
+    buildMCQ(t, T[u][i], u+"-"+i);
+  });
+});
+buildMCQ(document.querySelector('.test[data-unit="ex"]'), Q.ex, "ex");
+
+const wc = document.getElementById("written");
+W.forEach((it,i)=>{
+  const d = document.createElement("div"); d.className="q";
+  d.innerHTML = `<p>${it.q}</p><textarea placeholder="Escriu aquí la teva resposta..."></textarea>
+  <button class="btn show-ans" style="margin-top:8px">Veure resposta model</button>
+  <div class="model">${it.m}</div>
+  <div class="selfgrade"><span style="align-self:center;font-size:.9rem">Com t'ha anat?</span>
+    <button data-v="0">0 · Malament</button><button data-v="0.5">0,5 · A mitges</button><button data-v="1">1 · Bé</button></div>`;
+  d.querySelector(".show-ans").onclick = ()=>{ d.querySelector(".model").classList.add("show"); d.querySelector(".selfgrade").classList.add("show"); };
+  d.querySelectorAll(".selfgrade button").forEach(b=>b.onclick=()=>{
+    d.querySelectorAll(".selfgrade button").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
+    state.exB[i]=parseFloat(b.dataset.v); updateFinal();
+  });
+  wc.appendChild(d);
+});
+
+function updateFinal(){
+  const a = state.exA.ok||0, aDone = state.exA.done||0;
+  const bVals = Object.values(state.exB), b = bVals.reduce((s,v)=>s+v,0);
+  if(!aDone && !bVals.length){ document.getElementById("final").textContent="Respon les preguntes per veure la nota."; return; }
+  // Part A val 6 punts, Part B val 4 punts
+  const nota = (a/Q.ex.length)*6 + (b/W.length)*4;
+  document.getElementById("final").innerHTML =
+    `Test: <b>${a}/${Q.ex.length}</b> (${aDone} respostes) · Escrites: <b>${b}/${W.length}</b> (${bVals.length} autocorregides)<br>
+     <span style="font-size:1.4rem;font-weight:800;color:${nota>=5?'#16a34a':'#dc2626'}">Nota: ${nota.toFixed(2)} / 10</span>
+     <br><span style="color:#6b7280;font-size:.85rem">Part A = 6 punts · Part B = 4 punts</span>`;
+}
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:"smooth"}));
+const secs=["u2","u3","u4","ex"].map(id=>document.getElementById(id));
+window.addEventListener("scroll",()=>{let cur="u2";secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s.id});
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===cur));});
+</script>
+</body>
+</html>
